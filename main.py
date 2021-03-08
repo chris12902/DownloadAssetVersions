@@ -70,6 +70,18 @@ while Version <= maxVersions:
         except:
             print("ERROR: A file with the name '"+gameName+str(Version)+"."+SaveAs+"' already exists. Move or delete this file and run this program again.")
             quit
-    except:
+    except HTTPError:
         print("Error: Version "+str(Version)+" does not exist. Skipping to next version...")
+    except UnicodeDecodeError:
+        webbrowser.open('https://assetdelivery.roblox.com/v1/asset/?id='+str(ID)+'&version='+str(Version))
+        print("Downloading version "+str(Version)+"...")
+        time.sleep(3)
+        list_of_files = glob.glob('/Users/User/Downloads/*')
+        latest_file = max(list_of_files, key=os.path.getctime)
+        print(latest_file)
+        try:
+            os.rename(latest_file,"/Users/User/Downloads/"+gameName+str(Version)+"."+SaveAs)
+        except:
+            print("ERROR: A file with the name '"+gameName+str(Version)+"."+SaveAs+"' already exists. Move or delete this file and run this program again.")
+            quit
     Version = Version + 1
