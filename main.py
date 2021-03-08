@@ -1,5 +1,5 @@
 import webbrowser, time, glob, os, math
-from urllib.request import Request, urlopen
+from urllib.request import Request, urlopen, urlretrieve
 from urllib.error import HTTPError
 ID = int(input("Input the ID you'd like to download: "))
 SaveAs = input("Save as file type? ('rbxm' or 'rbxl'): ")
@@ -59,29 +59,11 @@ while Version <= maxVersions:
     try:
         req = Request('https://assetdelivery.roblox.com/v1/asset/?id='+str(ID)+'&version='+str(Version), headers={'User-Agent': 'Mozilla/5.0'})
         webpage = urlopen(req).read().decode('utf-8')
-        webbrowser.open('https://assetdelivery.roblox.com/v1/asset/?id='+str(ID)+'&version='+str(Version))
         print("Downloading version "+str(Version)+"...")
-        time.sleep(3)
-        list_of_files = glob.glob('/Users/User/Downloads/*')
-        latest_file = max(list_of_files, key=os.path.getctime)
-        print(latest_file)
-        try:
-            os.rename(latest_file,"/Users/User/Downloads/"+gameName+str(Version)+"."+SaveAs)
-        except:
-            print("ERROR: A file with the name '"+gameName+str(Version)+"."+SaveAs+"' already exists. Move or delete this file and run this program again.")
-            quit
+        urlretrieve('https://assetdelivery.roblox.com/v1/asset/?id='+str(ID)+'&version='+str(Version),gameName+str(Version)+"."+SaveAs)
     except HTTPError:
         print("Error: Version "+str(Version)+" does not exist. Skipping to next version...")
     except UnicodeDecodeError:
-        webbrowser.open('https://assetdelivery.roblox.com/v1/asset/?id='+str(ID)+'&version='+str(Version))
         print("Downloading version "+str(Version)+"...")
-        time.sleep(3)
-        list_of_files = glob.glob('/Users/User/Downloads/*')
-        latest_file = max(list_of_files, key=os.path.getctime)
-        print(latest_file)
-        try:
-            os.rename(latest_file,"/Users/User/Downloads/"+gameName+str(Version)+"."+SaveAs)
-        except:
-            print("ERROR: A file with the name '"+gameName+str(Version)+"."+SaveAs+"' already exists. Move or delete this file and run this program again.")
-            quit
+        urlretrieve('https://assetdelivery.roblox.com/v1/asset/?id='+str(ID)+'&version='+str(Version),gameName+str(Version)+"."+SaveAs)
     Version = Version + 1
