@@ -1,4 +1,4 @@
-import webbrowser, time, glob, os, math
+import os, math, gzip, shutil
 from urllib.request import Request, urlopen, urlretrieve
 from urllib.error import HTTPError
 ID = int(input("Input the ID you'd like to download: "))
@@ -54,7 +54,6 @@ if maxVersions == -1:
     maxVersions = findMaxVersions(ID)
     print("This asset has "+str(maxVersions)+" IDs")
 Version = 1
-time.sleep(2)
 while Version <= maxVersions:
     try:
         req = Request('https://assetdelivery.roblox.com/v1/asset/?id='+str(ID)+'&version='+str(Version), headers={'User-Agent': 'Mozilla/5.0'})
@@ -66,4 +65,9 @@ while Version <= maxVersions:
     except UnicodeDecodeError:
         print("Downloading version "+str(Version)+"...")
         urlretrieve('https://assetdelivery.roblox.com/v1/asset/?id='+str(ID)+'&version='+str(Version),gameName+str(Version)+"."+SaveAs)
+        with gzip.open(gameName+str(Version)+"."+SaveAs, 'rb') as f_in:
+            with open(gameName+str(Version)+"_temp"+"."+SaveAs, 'wb+') as f_out:
+                shutil.copyfileobj(f_in, f_out)
+        os.remove(gameName+str(Version)+"."+SaveAs)
+        os.rename(gameName+str(Version)+"_temp"+"."+SaveAs, gameName+str(Version)+"."+SaveAs)
     Version = Version + 1
