@@ -1,3 +1,8 @@
+# THIS PROGRAM IS NO LONGER MAINTAINED
+In the case that this program no longer works in the future, please use this instead: https://gist.github.com/jmkd3v/a3139efc1f4de3d5ac50eb068f8efb61
+
+--
+
 # DownloadAssetVersions
 This program downloads every version of an asset and automatically converts it to a .rbxm/.rbxl, depending on the user's choice.
 
